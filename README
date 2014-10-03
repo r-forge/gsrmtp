@@ -1,5 +1,0 @@
-			R-Forge SVN README
-
-The package builds are provided in the 'R Packages' tab for download 
-or can be installed directly in R from a CRAN-style repository using 
-'install.packages("gMCP", repos="http://R-Forge.R-project.org")'.

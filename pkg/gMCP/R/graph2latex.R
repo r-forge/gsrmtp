@@ -1,12 +1,77 @@
-graph2latex <- function(graph, package="TikZ", scale=1, alpha=0.05, pvalues,
-		fontsize=c("tiny","scriptsize", "footnotesize", "small",
-		"normalsize", "large", "Large", "LARGE", "huge", "Huge"),
-		nodeTikZ, labelTikZ="near start,above,fill=blue!20",
-		tikzEnv=TRUE, offset=c(0,0),fill=list(reject="red!80",retain="green!80"), nodeR=25) {
+#' Graph2LaTeX
+#' 
+#' Creates LaTeX code that represents the given graph.
+#' 
+#' For details see the given references.
+#' 
+#' @param graph A graph of class \code{\link{graphMCP}}.
+#' @param package A character string specifying the LaTeX package that should
+#' be used.  Up to now only \code{TikZ} is available.
+#' @param scale A numeric scalar specifying a possible scaling of the graph.
+#' Note that this does not effect the fontsize of the graph.
+#' Is only used if \code{tikzEnv==TRUE}.
+#' (Coordinates are interpreted in big points: 72 bp = 1 inch).
+#' @param showAlpha Logical whether local alpha levels or weights should be shown.
+#' @param alpha An optional numeric argument to specify the type I error rate.
+#' @param pvalues If the optional numeric argument pvalues is given, nodes that
+#' can be rejected, will be marked.
+#' @param fontsize An optional character vector specifying the fontsize for the
+#' graph, must be one of \code{"tiny"}, \code{"scriptsize"},
+#' \code{"footnotesize"}, \code{"small"}, \code{"normalsize"}, \code{"large"},
+#' \code{"Large"}, \code{"LARGE"}, \code{"huge"} or \code{"Huge"}.
+#' @param nodeTikZ A character string with additional arguments for the TikZ
+#' \code{node} command like for example \code{nodeTikZ="minimum size=2cm"}.
+#' @param labelTikZ A character string with arguments for the TikZ \code{node}
+#' command within an edge.
+#' @param tikzEnv Logical whether the LaTeX code should be wrapped in a TikZ
+#' environment.
+#' @param offset A numeric of length 2 specifying the x and y offset in the
+#' TikZ environment.
+#' @param fill A list containing 2 elements \code{reject} and \code{retain}
+#' specifying node fill colour of rejected and retained (or not yet rejected)
+#' nodes.
+#' @param fig Logical whether a figure environment should be created.
+#' @param fig.label Label for figure environment (if \code{fig==TRUE}).
+#' @param fig.caption Caption for figure environment (if \code{fig==TRUE}).
+#' @param nodeR Radius of nodes (pixel in Java, bp in LaTeX).
+#' @param scaleText Only used if scale is unequal 1 and \code{tikzEnv==TRUE}. 
+#' If \code{scaleText} is \code{TRUE} (the default) a scalebox environment is used.
+#' If it is \code{FALSE} the optional parameter \code{scale} from the
+#' tikzpicture environment is used and font size will not change. 
+#' Note that while you easily can change the scale in the scalebox environment,
+#' it is more problematic to adjust the scale in the tikzpicture environment
+#' afterwards in the LaTeX document, since for curved edges the parameters
+#' are calculated for a certain relative node size which changes if the graph
+#' is scaled but the text size stays the same.
+#' @return A character string that contains LaTeX code representing the given
+#' graph.
+#' @author Kornelius Rohmeyer \email{rohmeyer@@small-projects.de}
+#' @seealso \code{\link{graphMCP}}, \code{\link{gMCPReport}}
+#' @references The TikZ and PGF Packages Manual for version 2.00, Till Tantau,
+#' \url{http://www.ctan.org/tex-archive/graphics/pgf/base/doc/generic/pgf/pgfmanual.pdf}
+#' @keywords print graphs
+#' @examples
+#' 
+#' 
+#' g <- BonferroniHolm(5)
+#' 
+#' graph2latex(g)
+#' 
+#' 
+#' @export graph2latex
+graph2latex <- function(graph, package="TikZ", scale=1, showAlpha=FALSE, alpha=0.05, pvalues,
+		fontsize,	nodeTikZ, labelTikZ="near start,above,fill=blue!20",
+		tikzEnv=TRUE, offset=c(0,0),fill=list(reject="red!80",retain="green!80"),
+		fig=FALSE, fig.label=NULL, fig.caption=NULL, nodeR=25, scaleText=TRUE) {
 	graph <- placeNodes(graph)
 	colors <- c("yellow","black","blue","red","green")
-	if (tikzEnv) {
-		tikz <- paste("\\begin{tikzpicture}[scale=",scale,"]\n", sep="")
+	if (tikzEnv) {        
+		tikz <- paste("\\begin{tikzpicture}",
+                  ifelse(scaleText, 
+                         "",
+                         paste("[scale=",scale,"]", sep=""))
+                  ,"\n", sep="")    
+    if (!scaleText) nodeR <- nodeR / scale
 	} else {
 		tikz <- ""
 	}
@@ -19,10 +84,12 @@ graph2latex <- function(graph, package="TikZ", scale=1, alpha=0.05, pvalues,
 		y <- getYCoordinates(graph, node) + nodeR # It is more important to use nodeR to reduce the arc that should be drawn.
 		#alpha <- format(getWeights(graph,node), digits=3, drop0trailing=TRUE)
 		weight <- paste(getLaTeXFraction(getWeights(graph,node)), collapse=" ")
-		if (weight == 1) {
-			weight <- "\\alpha"
-		} else if (weight != "0") {
-			weight <- paste(weight, "\\alpha", sep="")
+		if (showAlpha) {
+		  if (weight == 1) {
+		    weight <- "\\alpha"
+		  } else if (weight != "0") {
+		    weight <- paste(weight, "\\alpha", sep="")
+		  }
 		}
 		double <- ""
 		if (!missing(pvalues)) {
@@ -58,18 +125,20 @@ graph2latex <- function(graph, package="TikZ", scale=1, alpha=0.05, pvalues,
 		for (i in getNodes(graph)) {
 			for (j in getNodes(graph)) {			
 				if (graph@m[i,j]!=0) {
+				  
 				  weight <- getWeightStr(graph, i, j, LaTeX=TRUE) 
 				  edgeNode <- paste("node[",labelTikZ,"] {$",weight,"$}",sep="")
-					# The following line test whether the edge in opposite direction exists:				          
+					# The following line tests whether the edge in opposite direction exists:				          
 					to <- paste(") to[",ifelse(graph@m[j,i]==0, "auto", "bend left=15"),"] ", edgeNode, sep="")
+          
           edgeNode <- paste("node[","fill=blue!20","] {$",weight,"$}",sep="") # TODO labelTikZ is ignored in this case
           # New arc function:
 					x <- try(unlist(edgeAttr(graph, i, j, "labelX")), silent = TRUE)          
 					y <- try(unlist(edgeAttr(graph, i, j, "labelY")), silent = TRUE)
 					if (!("try-error" %in% class(x)) && !is.null(x) && !is.na(x) && class(y)!="try-error" && !is.null(y) && !is.na(y) && x>-10 && y>-10) {
-					  b <- c(x,y) + nodeR
-					  x <- getXCoordinates(graph, c(i,j)) + nodeR
-					  y <- getYCoordinates(graph, c(i,j)) + nodeR
+					  b <- c(x+offset[1],y-offset[2]) + nodeR
+					  x <- getXCoordinates(graph, c(i,j)) + nodeR + offset[1]
+					  y <- getYCoordinates(graph, c(i,j)) + nodeR - offset[2]
 					  to2 <- try(getArc(c(x[1],y[1]),b,c(x[2],y[2]), edgeNode, nodeR=nodeR))
 					  if (!("try-error" %in% class(to2))) to <- to2
 					}          
@@ -84,6 +153,22 @@ graph2latex <- function(graph, package="TikZ", scale=1, alpha=0.05, pvalues,
 	if (!missing(fontsize)) {
 		tikz <- paste(paste("{\\", fontsize, sep=""), tikz, "}",sep="\n")
 	}
+  if ( !isTRUE(all.equal(scale,1, check.attributes=FALSE, check.names=FALSE)) && scaleText && tikzEnv) {
+    tikz <- paste(paste("\\scalebox{",scale,"}{",sep=""),tikz,"}",sep="\n")
+  }
+  if (fig) {
+    label <- " "
+    if (!is.null(fig.label)) {
+      label <- paste("\\label{", fig.label, "} ", sep="")
+    }
+    caption <- ""
+    if (!is.null(fig.caption)) {
+      caption <- paste("\\caption{",label,fig.caption,"}", sep="")
+    }
+    tikz <- paste("\\begin{figure}[ht]\n\\begin{center}", tikz,
+                  "\\end{center}", caption, "\\end{figure}", sep="\n")
+    
+  }
 	return(tikz)
 }
 
@@ -92,7 +177,7 @@ getArc <- function(a, b, c, edgeNode, col="black", nodeR=25) {
   #a <- invertY(a)
   #b <- invertY(b)
   #c <- invertY(c)
-  m <- try(getCenter(a,b,c,0.001))
+  m <- try(getCenter(a,b,c,0.001), silent=TRUE)
   if ("try-error" %in% class(m)) {
     return(getLine(a, b, c, edgeNode, col="black"))    
   }
@@ -228,6 +313,38 @@ getLaTeXFraction <- function(x) {
 	return(result)
 }
 
+#' Automatic Generation of gMCP Reports
+#' 
+#' Creates a LaTeX file with a gMCP Report.
+#' 
+#' This function uses \code{cat} and \code{graph2latex}.
+#' 
+#' @param object A graph of class \code{\link{graphMCP}} or an object of class
+#' \code{\link{gMCPResult}}.
+#' @param file A connection, or a character string naming the file to print to.
+#' If \code{""} (the default), the report is printed to the standard output
+#' connection (the console unless redirected by \code{sink}).  If it is
+#' \code{"|cmd"}, the output is piped to the command given by \code{cmd}, by
+#' opening a pipe connection [taken from the manual page of \code{cat}, which
+#' is called in this function].
+#' @param ...  Arguments to be passed to method \code{\link{graph2latex}} like
+#' \code{package} and \code{scale}.
+#' @return None (invisible \code{NULL}).
+#' @author Kornelius Rohmeyer \email{rohmeyer@@small-projects.de}
+#' @seealso \code{\link{cat}} \code{\link{graph2latex}}
+#' @references The TikZ and PGF Packages Manual for version 2.00, Till Tantau,
+#' \url{http://www.ctan.org/tex-archive/graphics/pgf/base/doc/generic/pgf/pgfmanual.pdf}
+#' @keywords print IO file graphs
+#' @examples
+#' 
+#' g <- BretzEtAl2011()
+#' 
+#' result <- gMCP(g, pvalues=c(0.1, 0.008, 0.005, 0.15, 0.04, 0.006))
+#' 
+#' gMCPReport(result)
+#' 
+#' @export gMCPReport
+#' 
 gMCPReport <- function(object, file="", ...) {
 	report <- LaTeXHeader()
 	if (class(object)=="gMCPResult") {

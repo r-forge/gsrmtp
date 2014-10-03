@@ -1,9 +1,20 @@
 useDynLib(gMCP)
 
+import(methods)
+# See https://stat.ethz.ch/pipermail/r-devel/2012-February/063396.html :
+importFrom(stats4, plot)
 import(utils)
 import(rJava)
+# Superfluous since xlsxjars has no functions (but still here for CRAN checks):
+import(xlsxjars)
 importFrom(CommonJavaJars, loadJars)
-importFrom(graphics, plot)
+importFrom(PolynomF, polynom)
+importFrom(mvtnorm, pmvnorm)
+importFrom(MASS, fractions)
+importFrom(multcomp, contrMat)
+# These methods are directly called by the GUI - we note them here for the CRAN checks:
+importFrom(JavaGD, JavaGD)
+importFrom(Matrix, bdiag)
 
 exportClasses(graphMCP, gMCPResult, gPADInterim, entangledMCP)
 exportMethods(plot, print)
@@ -17,6 +28,7 @@ export(matrix2graph, graph2matrix, bdiagNA, joinGraphs, subgraph)
 export(graphAnalysis)
 export(replaceVariables)
 export(unitTestsGMCP)
+export(getJavaInfo)
 
 export(BonferroniHolm)
 export(BretzEtAl2011)
@@ -34,6 +46,7 @@ export(cycleGraph)
 export(HuqueAloshEtBhore2011)
 export(Ferber2011, FerberTimeDose2011)
 export(Entangled1Maurer2012, Entangled2Maurer2012)
+export(WangTing2014)
 
 export(extractPower, calcPower, graphTest, rqmvnorm)
 export(plotSimCI)

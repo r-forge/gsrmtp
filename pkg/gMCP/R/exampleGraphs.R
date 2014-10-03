@@ -1,3 +1,120 @@
+#' Functions that create different example graphs
+#' 
+#' Functions that creates example graphs, e.g. graphs that represents a
+#' Bonferroni-Holm adjustment, parallel gatekeeping or special procedures from
+#' selected papers.
+#' 
+#' We are providing functions and not the resulting graphs directly because
+#' this way you have additional examples: You can look at the function body
+#' with \code{\link{body}} and see how the graph is built.
+#' 
+#' \describe{ \item{list("BonferroniHolm")}{ Returns a graph that represents a
+#' Bonferroni-Holm adjustment.  The result is a complete graph, where all nodes
+#' have the same weights and each edge weight is \eqn{\frac{1}{n-1}}{1/(n-1)}.
+#' } \item{list("BretzEtAl2011")}{ Graph in figure 2 from Bretz et al. See
+#' references (Bretz et al. 2011).  } \item{list("HommelEtAl2007")}{ Graph from
+#' Hommel et al. See references (Hommel et al. 2007).  }
+#' \item{list("parallelGatekeeping")}{ Graph for parallel gatekeeping. See
+#' references (Dmitrienko et al. 2003).  }
+#' \item{list("improvedParallelGatekeeping")}{ Graph for improved parallel
+#' gatekeeping. See references (Hommel et al. 2007).  }
+#' \item{list("HungEtWang2010")}{ Graph from Hung et Wang. See references (Hung
+#' et Wang 2010).  } \item{list("MaurerEtAl1995")}{ Graph from Maurer et al.
+#' See references (Maurer et al. 1995).  } \item{list("cycleGraph")}{ Cycle
+#' graph. The weight \code{weights[i]} specifies the edge weight from node
+#' \eqn{i}{i} to node \eqn{i+1}{i+1} for \eqn{i=1,\ldots,n-1}{i=1,...,n-1} and
+#' \code{weight[n]} from node \eqn{n}{n} to node 1.  }
+#' \item{list("improvedFallbackI")}{ Graph for the improved Fallback Procedure
+#' by Wiens & Dmitrienko. See references (Wiens et Dmitrienko 2005).  }
+#' \item{list("improvedFallbackII")}{ Graph for the improved Fallback Procedure
+#' by Hommel & Bretz. See references (Hommel et Bretz 2008).  }
+#' \item{list("Ferber2011")}{ Graph from Ferber et al. See references (Ferber
+#' et al. 2011).  } \item{list("FerberTimeDose2011")}{ Graph from Ferber et al.
+#' See references (Ferber et al. 2011).  } \item{list("Entangled1Maurer2012")}{
+#' Entangled graph from Maurer et al. TODO: Add references as soon as they are
+#' available.  } }
+#' 
+#' @name exampleGraphs
+#' @aliases exampleGraphs BonferroniHolm BretzEtAl2011 parallelGatekeeping
+#' improvedParallelGatekeeping HommelEtAl2007 HommelEtAl2007Simple
+#' HungEtWang2010 MaurerEtAl1995 improvedFallbackI improvedFallbackII
+#' cycleGraph fixedSequence generalSuccessive simpleSuccessiveI
+#' simpleSuccessiveII truncatedHolm fallback HuqueAloshEtBhore2011
+#' BauerEtAl2001 BretzEtAl2009a BretzEtAl2009b BretzEtAl2009c Ferber2011
+#' Entangled1Maurer2012 Entangled2Maurer2012 FerberTimeDose2011 WangTing2014
+#' @param n Number of hypotheses.
+#' @param nodes Character vector of node names.
+#' @param weights Numeric vector of node weights.
+#' @param times Number of time points.
+#' @param doses Number of dose levels.
+#' @param w Further variable weight(s) in graph.
+#' @param gamma An optional number in [0,1] specifying the value for variable gamma.
+#' @param delta An optional number in [0,1] specifying the value for variable delta.
+#' @param nu An optional number in [0,1] specifying the value for variable nu.
+#' @param tau An optional number in [0,1] specifying the value for variable tau.
+#' @param omega An optional number in [0,1] specifying the value for variable omega.
+#' @return A graph of class \code{\link{graphMCP}} that represents a
+#' sequentially rejective multiple test procedure.
+#' @author Kornelius Rohmeyer \email{rohmeyer@@small-projects.de}
+#' @references Holm, S. (1979). A simple sequentally rejective multiple test
+#' procedure. Scandinavian Journal of Statistics 6, 65-70.
+#' 
+#' Dmitrienko, A., Offen, W., Westfall, P.H. (2003). Gatekeeping strategies for
+#' clinical trials that do not require all primary effects to be significant.
+#' Statistics in Medicine. 22, 2387-2400.
+#' 
+#' Bretz, F., Maurer, W., Brannath, W., Posch, M.: A graphical approach to
+#' sequentially rejective multiple test procedures. Statistics in Medicine 2009
+#' vol. 28 issue 4 page 586-604.
+#' \url{http://www.meduniwien.ac.at/fwf_adaptive/papers/bretz_2009_22.pdf}
+#' 
+#' Bretz, F., Maurer, W. and Hommel, G. (2011), Test and power considerations
+#' for multiple endpoint analyses using sequentially rejective graphical
+#' procedures. Statistics in Medicine, 30: 1489--1501.
+#' 
+#' Hommel, G., Bretz, F. und Maurer, W. (2007). Powerful short-cuts for
+#' multiple testing procedures with special reference to gatekeeping
+#' strategies. Statistics in Medicine, 26(22), 4063-4073.
+#' 
+#' Hommel, G., Bretz, F. (2008): Aesthetics and power considerations in
+#' multiple testing - a contradiction? Biometrical Journal 50:657-666.
+#' 
+#' Hung H.M.J., Wang S.-J. (2010). Challenges to multiple testing in clinical
+#' trials. Biometrical Journal 52, 747-756.
+#' 
+#' W. Maurer, L. Hothorn, W. Lehmacher: Multiple comparisons in drug clinical
+#' trials and preclinical assays: a-priori ordered hypotheses. In Biometrie in
+#' der chemisch-pharmazeutischen Industrie, Vollmar J (ed.). Fischer Verlag:
+#' Stuttgart, 1995; 3-18.
+#' 
+#' Maurer, W., & Bretz, F. (2013). Memory and other properties of multiple test 
+#' procedures generated by entangled graphs. Statistics in medicine, 32 (10), 1739-1753.
+#' 
+#' Wiens, B.L., Dmitrienko, A. (2005): The fallback procedure for evaluating a
+#' single family of hypotheses. Journal of Biopharmaceutical Statistics
+#' 15:929-942.
+#' 
+#' Wang, B., Ting, N. (2014). An Application of Graphical Approach to 
+#' Construct Multiple Testing Procedures in a Hypothetical Phase III Design. 
+#' Frontiers in public health, 1 (75).
+#' 
+#' Ferber, G. Staner, L. and Boeijinga, P. (2011): Structured multiplicity and
+#' confirmatory statistical analyses in pharmacodynamic studies using the
+#' quantitative electroencephalogram, Journal of neuroscience methods, Volume
+#' 201, Issue 1, Pages 204-212.
+#' @keywords misc graphs
+#' @examples
+#' 
+#' g <- BonferroniHolm(5)
+#' 
+#' gMCP(g, pvalues=c(0.1, 0.2, 0.4, 0.4, 0.7))
+#' 
+#' HungEtWang2010()
+#' HungEtWang2010(nu=1)
+#' 
+NULL
+
+#' @rdname exampleGraphs
 BonferroniHolm <- function(n) {
 	if (missing(n)) { stop("Please provide the number of hypotheses as parameter n.") }
 	weights <- rep(1/n, n)
@@ -31,6 +148,7 @@ BonferroniHolm <- function(n) {
 	return(BonferroniHolm)
 }
 
+#' @rdname exampleGraphs
 BretzEtAl2011 <- function() {
 	# M:
 	m <- rbind(H11=c(0,   0.5, 0,   0.5, 0,   0  ),
@@ -72,10 +190,11 @@ BretzEtAl2011 <- function() {
 			"",
 			"Since in this example it is preferred to reject two adjacent hypotheses (like H11 and H21 instead of H11 and H31) there are only edges between adjacent nodes.",
 			"",
-			"Literature: Bretz, F., Maurer, W. and Hommel, G. (2011), Test and power considerations for multiple endpoint analyses using sequentially rejective graphical procedures. Statistics in Medicine, 30: n/a.", sep="\n")
+			"Literature: Bretz, F., Maurer, W. and Hommel, G. (2011), Test and power considerations for multiple endpoint analyses using sequentially rejective graphical procedures. Statistics in Medicine, 30: 1489-1501.", sep="\n")
 	return(graph)	
 }
 
+#' @rdname exampleGraphs
 BauerEtAl2001 <- function() {
 	# M:
 	hnodes <- c("H_{E_1}","H_{E_2}","H_{E_3}","H_{S_1}","H_{S_2}","H_{S_3}")
@@ -107,6 +226,7 @@ BauerEtAl2001 <- function() {
 	return(graph)	
 }
 
+#' @rdname exampleGraphs
 BretzEtAl2009a <- function() {
 	# M:
 	hnodes <- c("H_{11}","H_{21}","H_{12}","H_{22}","H_{13}","H_{23}")
@@ -129,6 +249,7 @@ BretzEtAl2009a <- function() {
 	return(graph)	
 }
 
+#' @rdname exampleGraphs
 BretzEtAl2009b <- function() {
 	# M:
 	hnodes <- c("H_{11}","H_{21}","H_{12}","H_{22}","H_{13}","H_{23}")
@@ -155,6 +276,7 @@ BretzEtAl2009b <- function() {
 	return(graph)	
 }
 
+#' @rdname exampleGraphs
 BretzEtAl2009c <- function() {
 	# M:
 	hnodes <- c("H_{11}","H_{21}","H_{12}","H_{22}","H_{13}","H_{23}")
@@ -180,6 +302,7 @@ BretzEtAl2009c <- function() {
 	return(graph)	
 }
 
+#' @rdname exampleGraphs
 HommelEtAl2007 <- function() {
 	# Nodes:
 	weights <- c(rep(1/3, 3), rep(0,4))	
@@ -221,7 +344,7 @@ HommelEtAl2007 <- function() {
 	return(graph)	
 }
 
-
+#' @rdname exampleGraphs
 HommelEtAl2007Simple <- function() {
 	# Nodes:
 	weights <- c(rep(1/3, 3), rep(0,4))	
@@ -252,6 +375,7 @@ HommelEtAl2007Simple <- function() {
 	return(graph)	
 }
 
+#' @rdname exampleGraphs
 parallelGatekeeping <- function() {
 	# Nodes:
 	weights <- rep(c(1/2,0), each=2)	
@@ -281,6 +405,7 @@ parallelGatekeeping <- function() {
 	return(graph)	
 }
 
+#' @rdname exampleGraphs
 improvedParallelGatekeeping <- function() {
 	graph <- parallelGatekeeping()
 	graph <- setEdge("H3", "H1", graph, "\\epsilon")
@@ -301,6 +426,7 @@ improvedParallelGatekeeping <- function() {
 	return(graph)	
 }
 
+#' @rdname exampleGraphs
 fallback <- function(weights) {
 	if (missing(weights)) { stop("Please provide weights.") }
 	n <- length(weights)
@@ -324,6 +450,7 @@ fallback <- function(weights) {
 	return(graph)
 }
 
+#' @rdname exampleGraphs
 fixedSequence <- function(n) {
 	if (missing(n)) { stop("Please provide the number of hypotheses as parameter n.") }
 	weights <- c(1, rep(0, n-1))
@@ -336,6 +463,7 @@ fixedSequence <- function(n) {
 	return(graph)
 }
 
+#' @rdname exampleGraphs
 simpleSuccessiveI <- function() {
 	graph <- generalSuccessive()
 	graph <- replaceVariables(graph, variables=list("gamma"=0, "delta"=0))
@@ -347,6 +475,7 @@ simpleSuccessiveI <- function() {
 	return(graph)
 }
 
+#' @rdname exampleGraphs
 simpleSuccessiveII <- function() {
 	graph <- generalSuccessive()
 	graph <- replaceVariables(graph, variables=list("gamma"=1/2, "delta"=1/2))
@@ -356,7 +485,8 @@ simpleSuccessiveII <- function() {
 	return(graph)
 }
 
-truncatedHolm <- function() {
+#' @rdname exampleGraphs
+truncatedHolm <- function(gamma) {
 	# Nodes:
 	weights <- c(1/2, 1/2, 0, 0)
 	hnodes <- paste("H", 1:4, sep="")
@@ -379,6 +509,9 @@ truncatedHolm <- function() {
 			"Literature: Dmitrienko A, Tamhane A, Wiens B. General multi-stage gatekeeping procedures. Biometrical Journal 2008; 50:667-677.",
 			"",
 			"F. Bretz, M. Posch, E. Glimm, F. Klinglmueller, W. Maurer, K. Rohmeyer (2011), Graphical approaches for multiple comparison procedures using weighted Bonferroni, Simes or parametric tests. To be published. Figure 5.", sep="\n")
+	if (!missing(gamma)) {
+	  graph <- replaceVariables(graph, variables=list("gamma"=gamma))
+	}
 	return(graph)
 }
 
@@ -390,7 +523,8 @@ truncatedHolm <- function() {
 # - and there are no edges leading from a secondary hypothesis to
 #   another secondary hypothesis that has not the same parents.
 
-generalSuccessive <- function(weights=c(1/2,1/2)) {
+#' @rdname exampleGraphs
+generalSuccessive <- function(weights=c(1/2,1/2), gamma, delta) {
 	if (length(weights)!=2) stop("Please specify the weights for H1 and H2 and only these.")
 	# Nodes:
 	weights <- c(weights, 0, 0)
@@ -411,10 +545,17 @@ generalSuccessive <- function(weights=c(1/2,1/2)) {
 	graph@nodeAttr$Y <- nodeY	
 	attr(graph, "description") <- paste("General successive graph from Bretz et al. (2011), Figure 6", 
 			"",
-			"Literature: Bretz, F., Maurer, W. and Hommel, G. (2011), Test and power considerations for multiple endpoint analyses using sequentially rejective graphical procedures. Statistics in Medicine, 30: n/a.", sep="\n")
+			"Literature: Bretz, F., Maurer, W. and Hommel, G. (2011), Test and power considerations for multiple endpoint analyses using sequentially rejective graphical procedures. Statistics in Medicine, 30: 1489-1501.", sep="\n")
+	variables <- list()
+	if (!missing(gamma)) variables[["gamma"]] <- gamma
+	if (!missing(delta)) variables[["delta"]] <- delta	
+	if (length(variables)>0) {
+	  graph <- replaceVariables(graph, variables=variables, partial=TRUE)
+	}
 	return(graph)		
 }
 
+#' @rdname exampleGraphs
 HuqueAloshEtBhore2011 <- function() {
 	graph <- HungEtWang2010()
 	graph <- replaceVariables(graph, variables=list("nu"=1/2, "omega"=1/2, "tau"=0))
@@ -430,8 +571,8 @@ HuqueAloshEtBhore2011 <- function() {
 	return(graph)	
 }
 
-
-HungEtWang2010 <- function() {
+#' @rdname exampleGraphs
+HungEtWang2010 <- function(nu, tau, omega) {
 	# Nodes:
 	weights <- c(1,0,0,0)	
 	hnodes <- c("H_{1,NI}","H_{1,S}","H_{2,NI}","H_{2,S}")
@@ -456,9 +597,17 @@ HungEtWang2010 <- function() {
 			"H_{2,S}  : Superiority of the secondary endpoint",
 			"",
 			"Literature: Hung H.M.J., Wang S.-J. (2010). Challenges to multiple testing in clinical trials. Biometrical Journal 52, 747-756.", sep="\n")
+  variables <- list()
+  if (!missing(nu)) variables[["nu"]] <- nu
+	if (!missing(omega)) variables[["omega"]] <- omega
+	if (!missing(tau)) variables[["tau"]] <- tau
+  if (length(variables)>0) {
+	  graph <- replaceVariables(graph, variables=variables, partial=TRUE)
+  }
 	return(graph)
 }
 
+#' @rdname exampleGraphs
 MaurerEtAl1995 <- function() {
 	# Nodes:
 	weights <- c(1,0,0,0,0)	
@@ -500,6 +649,7 @@ MaurerEtAl1995 <- function() {
 	return(graph)	
 }
 
+#' @rdname exampleGraphs
 cycleGraph <- function(nodes, weights) {
 	# Edges:
 	n <- length(nodes)
@@ -511,6 +661,7 @@ cycleGraph <- function(nodes, weights) {
 	return(graph)
 }
 
+#TODO @rdname exampleGraphs
 gatekeeping <- function(n, type=c("serial", "parallel", "imporved parallel"), weights=rep(1/n, n)) {
 	# Nodes:
 	hnodes <- paste("H", 1:(2*n), sep="")
@@ -533,15 +684,7 @@ gatekeeping <- function(n, type=c("serial", "parallel", "imporved parallel"), we
 	return(graph)
 }
 
-exampleGraph <- function(graph, ...) {
-	switch(graph,
-			Hommel=HommelEtAl2007(),
-			Bretz=BretzEtAl2011(),
-			ParallelGatekeeping=parallelGatekeeping(),
-			ImprovedParallelGatekeeping=improvedParallelGatekeeping(),
-			BonferroniHolm=BonferroniHolm(...))
-}
-
+#' @rdname exampleGraphs
 improvedFallbackI <- function(weights=rep(1/3, 3)) {
 	# Nodes:
 	hnodes <- paste("H", 1:3, sep="")
@@ -558,7 +701,7 @@ improvedFallbackI <- function(weights=rep(1/3, 3)) {
 			"",
 			"Literature: B.L. Wiens, A. Dmitrienko (2005): The fallback procedure for evaluating a single family of hypotheses. Journal of Biopharmaceutical Statistics 15:929-942.",
 			"",
-			"Bretz, F., Maurer, W. and Hommel, G. (2011), Test and power considerations for multiple endpoint analyses using sequentially rejective graphical procedures. Statistics in Medicine, 30: n/a.", sep="\n")
+			"Bretz, F., Maurer, W. and Hommel, G. (2011), Test and power considerations for multiple endpoint analyses using sequentially rejective graphical procedures. Statistics in Medicine, 30: 1489-1501.", sep="\n")
 	edgeAttr(graph, "H3", "H1", "labelX") <- 300
 	edgeAttr(graph, "H3", "H1", "labelY") <- 200
 	edgeAttr(graph, "H2", "H3", "labelX") <- 400
@@ -568,6 +711,7 @@ improvedFallbackI <- function(weights=rep(1/3, 3)) {
 	return(graph)
 } 
 
+#' @rdname exampleGraphs
 improvedFallbackII <- function(weights=rep(1/3, 3)) {
 	# Nodes:
 	hnodes <- paste("H", 1:3, sep="")
@@ -584,7 +728,7 @@ improvedFallbackII <- function(weights=rep(1/3, 3)) {
 			"",
 			"Literature: G. Hommel, F. Bretz (2008): Aesthetics and power considerations in multiple testing - a contradiction? Biometrical Journal 50:657-666.",
 			"",
-			"Bretz, F., Maurer, W. and Hommel, G. (2011), Test and power considerations for multiple endpoint analyses using sequentially rejective graphical procedures. Statistics in Medicine, 30: n/a.", sep="\n")
+			"Bretz, F., Maurer, W. and Hommel, G. (2011), Test and power considerations for multiple endpoint analyses using sequentially rejective graphical procedures. Statistics in Medicine, 30: 1489-1501.", sep="\n")
 	edgeAttr(graph, "H3", "H1", "labelX") <- 300
 	edgeAttr(graph, "H3", "H1", "labelY") <- 200
 	edgeAttr(graph, "H1", "H2", "labelX") <- 200
@@ -594,7 +738,7 @@ improvedFallbackII <- function(weights=rep(1/3, 3)) {
 	return(graph)
 } 
 
-
+#' @rdname exampleGraphs
 FerberTimeDose2011 <- function(times, doses, w="\\nu") {
 	# Nodes:
 	hnodes <- paste(rep(paste("T", 1:times, sep=""), each=doses),"D",1:doses, sep="")
@@ -622,11 +766,12 @@ FerberTimeDose2011 <- function(times, doses, w="\\nu") {
 			"",
 			"Literature: G. Ferber, L. Staner and P. Boeijinga (2011): Structured multiplicity and confirmatory statistical analyses in pharmacodynamic studies using the quantitative electroencephalogram, Journal of neuroscience methods, Volume 201, Issue 1, Pages 204-212.", sep="\n")
 	# Placing nodes and converting to numeric
-	graph <- placeNodes(gMCP:::parse2numeric(graph), times, doses)
+	graph <- placeNodes(parse2numeric(graph), times, doses)
 	return(graph)
 }
 
-Ferber2011 <- function() {
+#' @rdname exampleGraphs
+Ferber2011 <- function(w) {
 	# Nodes:
 	hnodes <- c("\\delta", "\\theta", "\\beta", "\\alpha", "\\alpha_1", 
 			"\\alpha_2", "\\beta_1", "\\beta_2", "\\beta_3")
@@ -671,9 +816,14 @@ Ferber2011 <- function() {
 							"\\theta", "\\beta", "\\alpha", "\\alpha_1", "\\alpha_2", 
 							"\\beta_1", "\\beta_2", "\\beta_3")))
 	
+	if (!missing(w)) {
+	  graph <- replaceVariables(graph, variables=list("w"=w))
+	}
+  
 	return(graph)
 }
 
+#' @rdname exampleGraphs
 Entangled1Maurer2012 <- function() {
 	m <- rbind(H1=c(0, 0, 1, 0, 0),
 			H2=c(0, 0, 1, 0, 0),
@@ -732,11 +882,12 @@ Entangled1Maurer2012 <- function() {
 
 	attr(graph, "description") <- paste("Graph from Maurer and Bretz 2012",
 			"",
-			"Literature: Not yet published.", sep="\n")
+			"Literature: Maurer, W., & Bretz, F. (2013). Memory and other properties of multiple test procedures generated by entangled graphs. Statistics in medicine, 32(10), 1739-1753.", sep="\n")
 	
 	return(graph)
 }
 
+#' @rdname exampleGraphs
 Entangled2Maurer2012 <- function() {
 	m <- rbind(H1=c(0, 0, 1, 0, 0),
 			H2=c(0, 0, 0, 0, 1),
@@ -771,7 +922,59 @@ Entangled2Maurer2012 <- function() {
 	
 	attr(graph, "description") <- paste("Graph from Maurer and Bretz 2012",
 			"",
-			"Literature: Not yet published.", sep="\n")
+			"Literature: Maurer, W., & Bretz, F. (2013). Memory and other properties of multiple test procedures generated by entangled graphs. Statistics in medicine, 32(10), 1739-1753.", sep="\n")
 	
 	return(graph)
+}
+
+#' @rdname exampleGraphs
+WangTing2014 <- function(nu, tau) {
+  m <- rbind(H1=c("0", "1-\\nu", "\\nu/2", "\\nu/2", "0", "0"),
+             H2=c("1-\\nu", "0", "0", "0", "\\nu/2", "\\nu/2"),
+             H3=c("0", "\\tau", "0", "1-\\tau", "0", "0"),
+             H4=c("0", "\\tau", "1-\\tau", "0", "0", "0"),
+             H5=c("\\tau", "0", "0", "0", "0", "1-\\tau"),
+             H6=c("\\tau", "0", "0", "0", "1-\\tau", "0"))
+  
+  weights <- c(1/2, 1/2, 0, 0, 0, 0)
+  
+  graph <- new("graphMCP", m=m, weights=weights)
+  
+  graph@nodeAttr$X <- c(350, 350, 100, 250, 450, 600)-50
+  graph@nodeAttr$Y <- c(100, 400, 250, 250, 250, 250)-50
+  
+  edgeAttr(graph, "H1", "H3", "labelX") <- 125
+  edgeAttr(graph, "H1", "H3", "labelY") <- 125
+  edgeAttr(graph, "H1", "H4", "labelX") <- 225
+  edgeAttr(graph, "H1", "H4", "labelY") <- 125
+  edgeAttr(graph, "H3", "H2", "labelX") <- 125
+  edgeAttr(graph, "H3", "H2", "labelY") <- 275
+  edgeAttr(graph, "H4", "H2", "labelX") <- 225
+  edgeAttr(graph, "H4", "H2", "labelY") <- 275
+  
+  edgeAttr(graph, "H6", "H1", "labelX") <- 550-125+50
+  edgeAttr(graph, "H6", "H1", "labelY") <- 125
+  edgeAttr(graph, "H5", "H1", "labelX") <- 550-225+50
+  edgeAttr(graph, "H5", "H1", "labelY") <- 125
+  edgeAttr(graph, "H2", "H6", "labelX") <- 550-125+50
+  edgeAttr(graph, "H2", "H6", "labelY") <- 275
+  edgeAttr(graph, "H2", "H5", "labelX") <- 550-225+50
+  edgeAttr(graph, "H2", "H5", "labelY") <- 275
+  
+  attr(graph, "description") <- paste("Graph from Wang and Ting 2014",
+                                      "With \u03BD=1, \u2CA7=0.5 graph from figure 3,",
+                                      "with \u03BD=1, \u2CA7=\u03B5 graph from figure 4 and",
+                                      "with \u03BD=\u03B5, \u2CA7=\u03B5 graph from figure 5.",
+                                      "",
+                                      "Literature: Wang, B., Ting, N. (2014). An Application of Graphical Approach to Construct Multiple Testing Procedures in a Hypothetical Phase III Design. Frontiers in public health, 1 (75).",
+                                      "URL: http://journal.frontiersin.org/Journal/10.3389/fpubh.2013.00075/full", sep="\n")
+  
+  variables <- list()
+  if (!missing(nu)) variables[["nu"]] <- nu
+  if (!missing(tau)) variables[["tau"]] <- tau
+  if (length(variables)>0) {
+    graph <- replaceVariables(graph, variables=variables, partial=TRUE)
+  }
+  
+  return(graph)
 }

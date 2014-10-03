@@ -1,7 +1,12 @@
 updateGraphToNewClassDefinition <- function(object, askToInstallGraph=TRUE) {
 	if ("entangledMCP" %in% class(object)) return(object)
 	if (!("try-error"%in% class(try(object@m, silent=TRUE)))) return(object)
-	requireLibrary("graph")
+	if (!requireLibrary("graph")) {
+		stop(paste("Library graph is required for converting but was not installed.",
+						"Please try to install package 'graph' manually.",
+						"See http://www.bioconductor.org/packages/release/bioc/html/graph.html"
+				, sep="\n"))
+	}	
 	nodes <- object@nodes
 	edges <- object@edgeL
 	eData <- object@edgeData@data
@@ -45,6 +50,13 @@ updateGraphToNewClassDefinition <- function(object, askToInstallGraph=TRUE) {
 	rownames(m) <- colnames(m) <- nodes
 	return(new("graphMCP", m=m, weights=w, edgeAttr=edgeAttr, nodeAttr=nodeAttr))
 }
+
+# The function 'makeEpsilonString' takes the real part of the weight and 
+# a coefficent vector 'p' for different powers of epsilon and returns the combined weight as a character vector.
+# Examples:
+#  makeEpsilonString(1/2,c(1,-1,1/2)) == "1/2+\\epsilon-\\epsilon^2+1/2*\\epsilon^3"
+#  makeEpsilonString(0,c(1,-1,1/2)) == "\\epsilon-\\epsilon^2+1/2*\\epsilon^3"
+#  makeEpsilonString(1/2,c()) == "1/2"
 
 makeEpsilonString <- function(weight, p) {	
 	frac <- function(x) {as.character(fractions(x))}

@@ -1,0 +1,15 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+aux$
+log$
+out$
+toc$
+blg$
+bbl$
+-concordance.tex$
+.synctex.gz$
+^vignettes/cache$
+^vignettes/figure$
+^inst/classes$
+^java/classes$
+^classes$

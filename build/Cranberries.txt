@@ -1524,3 +1524,282 @@ Diff between gMCP versions 0.7-12 dated 2012-08-02 and 0.8-0 dated 2012-10-14
  gMCP-0.8-1/gMCP/man/graphGUI.Rd                                                            |    2
   
  28 files changed, 177 insertions(+), 197 deletions(-)
+ 
+ Diff between gMCP versions 0.8-1 dated 2013-04-06 and 0.8-3 dated 2013-06-14
+
+ gMCP-0.8-1/gMCP/inst/doc/gMCP.loa                                                          |only
+ gMCP-0.8-1/gMCP/inst/doc/gMCP.lof                                                          |only
+ gMCP-0.8-1/gMCP/inst/doc/gMCP.lot                                                          |only
+ gMCP-0.8-3/gMCP/DESCRIPTION                                                                |    6 
+ gMCP-0.8-3/gMCP/MD5                                                                        |   74 ++---
+ gMCP-0.8-3/gMCP/NEWS                                                                       |   34 ++
+ gMCP-0.8-3/gMCP/R/calcPower.R                                                              |   15 -
+ gMCP-0.8-3/gMCP/R/graph2latex.R                                                            |  143 +++++++++-
+ gMCP-0.8-3/gMCP/R/graphTest.R                                                              |    4 
+ gMCP-0.8-3/gMCP/R/misc.R                                                                   |    2 
+ gMCP-0.8-3/gMCP/R/startGUIs.R                                                              |   17 -
+ gMCP-0.8-3/gMCP/TODO                                                                       |   32 --
+ gMCP-0.8-3/gMCP/inst/doc/AQuickStart.R                                                     |only
+ gMCP-0.8-3/gMCP/inst/doc/AQuickStart.Rnw                                                   |    2 
+ gMCP-0.8-3/gMCP/inst/doc/AQuickStart.pdf                                                   |binary
+ gMCP-0.8-3/gMCP/inst/doc/Makefile                                                          |    2 
+ gMCP-0.8-3/gMCP/inst/doc/figure/unnamed-chunk-23.pdf                                       |binary
+ gMCP-0.8-3/gMCP/inst/doc/gMCP.R                                                            |only
+ gMCP-0.8-3/gMCP/inst/doc/gMCP.pdf                                                          |binary
+ gMCP-0.8-3/gMCP/inst/doc/gMCP/gMCP.Rnw                                                     |    2 
+ gMCP-0.8-3/gMCP/inst/doc/parametric.R                                                      |only
+ gMCP-0.8-3/gMCP/inst/doc/parametric.Rnw                                                    |    2 
+ gMCP-0.8-3/gMCP/inst/doc/parametric.pdf                                                    |binary
+ gMCP-0.8-3/gMCP/inst/java-src/org/af/gMCP/config/GeneralConfig.java                        |    9 
+ gMCP-0.8-3/gMCP/inst/java-src/org/af/gMCP/gui/CreateGraphGUI.java                          |    2 
+ gMCP-0.8-3/gMCP/inst/java-src/org/af/gMCP/gui/MenuBarMGraph.java                           |    4 
+ gMCP-0.8-3/gMCP/inst/java-src/org/af/gMCP/gui/dialogs/PowerDialogParameterUncertainty.java |  110 ++++++-
+ gMCP-0.8-3/gMCP/inst/java-src/org/af/gMCP/gui/graph/Edge.java                              |    9 
+ gMCP-0.8-3/gMCP/inst/java-src/org/af/gMCP/gui/graph/NetList.java                           |    2 
+ gMCP-0.8-3/gMCP/inst/java-src/org/af/gMCP/gui/graph/Node.java                              |    5 
+ gMCP-0.8-3/gMCP/inst/java/gsrmtp.jar                                                       |binary
+ gMCP-0.8-3/gMCP/inst/unitTests/runit.LaTeX.R                                               |    5 
+ gMCP-0.8-3/gMCP/inst/unitTests/runit.power.R                                               |    2 
+ gMCP-0.8-3/gMCP/man/calcPower.Rd                                                           |   15 -
+ gMCP-0.8-3/gMCP/man/confint.Rd                                                             |    3 
+ gMCP-0.8-3/gMCP/man/corMatWizard.Rd                                                        |    3 
+ gMCP-0.8-3/gMCP/man/doUnitTestsForGMCP.Rd                                                  |    6 
+ gMCP-0.8-3/gMCP/man/graph2latex.Rd                                                         |    6 
+ gMCP-0.8-3/gMCP/man/graphGUI.Rd                                                            |   33 +-
+ gMCP-0.8-3/gMCP/man/graphTest.Rd                                                           |   10 
+ gMCP-0.8-3/gMCP/man/secondStageTest.Rd                                                     |    3 
+ 41 files changed, 422 insertions(+), 140 deletions(-)
+
+Diff between gMCP versions 0.8-3 dated 2013-06-14 and 0.8-4 dated 2013-07-15
+
+ gMCP-0.8-3/gMCP/inst/doc/Makefile                                              |only
+ gMCP-0.8-3/gMCP/inst/doc/figure                                                |only
+ gMCP-0.8-3/gMCP/inst/doc/gMCP                                                  |only
+ gMCP-0.8-3/gMCP/inst/doc/literatur.bib                                         |only
+ gMCP-0.8-3/gMCP/inst/doc/myIndex.ist                                           |only
+ gMCP-0.8-3/gMCP/inst/doc/pictures                                              |only
+ gMCP-0.8-4/gMCP/.Rinstignore                                                   |    7 
+ gMCP-0.8-4/gMCP/DESCRIPTION                                                    |   17 
+ gMCP-0.8-4/gMCP/MD5                                                            |  265 ++++++++--
+ gMCP-0.8-4/gMCP/NAMESPACE                                                      |    4 
+ gMCP-0.8-4/gMCP/NEWS                                                           |   26 
+ gMCP-0.8-4/gMCP/R/calcPower.R                                                  |   16 
+ gMCP-0.8-4/gMCP/R/convertFromOldClassDefinition.R                              |    7 
+ gMCP-0.8-4/gMCP/R/rqmvnorm.R                                                   |   66 +-
+ gMCP-0.8-4/gMCP/R/startGUIs.R                                                  |    2 
+ gMCP-0.8-4/gMCP/TODO                                                           |   45 +
+ gMCP-0.8-4/gMCP/inst/classes                                                   |only
+ gMCP-0.8-4/gMCP/inst/doc/AQuickStart.pdf                                       |binary
+ gMCP-0.8-4/gMCP/inst/doc/gMCP.pdf                                              |binary
+ gMCP-0.8-4/gMCP/inst/doc/parametric.pdf                                        |binary
+ gMCP-0.8-4/gMCP/inst/java-src/org/af/gMCP/gui/CreateGraphGUI.java              |   15 
+ gMCP-0.8-4/gMCP/inst/java-src/org/af/gMCP/gui/DebugTextConsole.java            |    4 
+ gMCP-0.8-4/gMCP/inst/java-src/org/af/gMCP/gui/MenuBarMGraph.java               |   19 
+ gMCP-0.8-4/gMCP/inst/java-src/org/af/gMCP/gui/RControl.java                    |   16 
+ gMCP-0.8-4/gMCP/inst/java-src/org/af/gMCP/gui/dialogs/DialogConfIntEstVar.java |    2 
+ gMCP-0.8-4/gMCP/inst/java-src/org/af/gMCP/gui/graph/Edge.java                  |    5 
+ gMCP-0.8-4/gMCP/inst/java-src/org/af/gMCP/gui/graph/LaTeXTool.java             |   13 
+ gMCP-0.8-4/gMCP/inst/java-src/org/af/gMCP/gui/graph/Node.java                  |   11 
+ gMCP-0.8-4/gMCP/inst/java/gsrmtp.jar                                           |binary
+ gMCP-0.8-4/gMCP/inst/unitTests/runit.LaTeX.R                                   |    9 
+ gMCP-0.8-4/gMCP/inst/unitTests/runit.cover.everything.R                        |only
+ gMCP-0.8-4/gMCP/inst/unitTests/runit.power.R                                   |    2 
+ gMCP-0.8-4/gMCP/man/calcPower.Rd                                               |    8 
+ gMCP-0.8-4/gMCP/man/exampleGraphs.Rd                                           |    5 
+ gMCP-0.8-4/gMCP/man/graph2latex.Rd                                             |    3 
+ gMCP-0.8-4/gMCP/tests/doRUnit.R                                                |    6 
+ gMCP-0.8-4/gMCP/vignettes                                                      |only
+ 37 files changed, 437 insertions(+), 136 deletions(-)
+
+Diff between gMCP versions 0.8-4 dated 2013-07-15 and 0.8-5 dated 2013-07-18
+
+ gMCP-0.8-4/gMCP/inst/classes                            |only
+ gMCP-0.8-5/gMCP/.Rinstignore                            |    2 
+ gMCP-0.8-5/gMCP/DESCRIPTION                             |    7 
+ gMCP-0.8-5/gMCP/MD5                                     |  198 +---------------
+ gMCP-0.8-5/gMCP/NEWS                                    |   28 +-
+ gMCP-0.8-5/gMCP/R/calcPower.R                           |   12 
+ gMCP-0.8-5/gMCP/R/graph2latex.R                         |   10 
+ gMCP-0.8-5/gMCP/R/rqmvnorm.R                            |    5 
+ gMCP-0.8-5/gMCP/inst/doc/AQuickStart.pdf                |binary
+ gMCP-0.8-5/gMCP/inst/doc/gMCP.Rnw                       |    2 
+ gMCP-0.8-5/gMCP/inst/doc/gMCP.pdf                       |binary
+ gMCP-0.8-5/gMCP/inst/doc/parametric.Rnw                 |    2 
+ gMCP-0.8-5/gMCP/inst/doc/parametric.pdf                 |binary
+ gMCP-0.8-5/gMCP/inst/unitTests/runit.cover.everything.R |   10 
+ gMCP-0.8-5/gMCP/man/calcPower.Rd                        |   22 -
+ gMCP-0.8-5/gMCP/man/rqmvnorm.Rd                         |    3 
+ gMCP-0.8-5/gMCP/vignettes/Makefile                      |   28 --
+ gMCP-0.8-5/gMCP/vignettes/createKnitrVignette.sh        |only
+ gMCP-0.8-5/gMCP/vignettes/createSweaveVignette.sh       |only
+ gMCP-0.8-5/gMCP/vignettes/figure/unnamed-chunk-23.pdf   |binary
+ gMCP-0.8-5/gMCP/vignettes/gMCP.Rnw                      |    2 
+ gMCP-0.8-5/gMCP/vignettes/gMCP/gMCP-fake.Rnw            |    2 
+ gMCP-0.8-5/gMCP/vignettes/gMCP/gMCP.Rnw                 |    1 
+ gMCP-0.8-5/gMCP/vignettes/parametric.Rnw                |    2 
+ 24 files changed, 88 insertions(+), 248 deletions(-)
+
+Diff between gMCP versions 0.8-5 dated 2013-07-18 and 0.8-6 dated 2014-02-17
+
+ gMCP-0.8-5/gMCP/inst/doc/AQuickStart.R                                                     |only
+ gMCP-0.8-5/gMCP/inst/doc/gMCP.R                                                            |only
+ gMCP-0.8-5/gMCP/inst/doc/parametric.R                                                      |only
+ gMCP-0.8-5/gMCP/man/doUnitTestsForGMCP.Rd                                                  |only
+ gMCP-0.8-5/gMCP/vignettes/createSweaveVignette.sh                                          |only
+ gMCP-0.8-6/gMCP/.Rinstignore                                                               |    2 
+ gMCP-0.8-6/gMCP/DESCRIPTION                                                                |   14 
+ gMCP-0.8-6/gMCP/INSTALL                                                                    |   10 
+ gMCP-0.8-6/gMCP/MD5                                                                        |  286 ++++--
+ gMCP-0.8-6/gMCP/NAMESPACE                                                                  |   12 
+ gMCP-0.8-6/gMCP/NEWS                                                                       |   71 +
+ gMCP-0.8-6/gMCP/R/analysis.R                                                               |   27 
+ gMCP-0.8-6/gMCP/R/calcPower.R                                                              |  140 +++
+ gMCP-0.8-6/gMCP/R/closure.R                                                                |    2 
+ gMCP-0.8-6/gMCP/R/convertFromOldClassDefinition.R                                          |    7 
+ gMCP-0.8-6/gMCP/R/doRUnitTests.R                                                           |   42 
+ gMCP-0.8-6/gMCP/R/exampleGraphs.R                                                          |  157 +++
+ gMCP-0.8-6/gMCP/R/gMCP.R                                                                   |  148 +++
+ gMCP-0.8-6/gMCP/R/gPAD.R                                                                   |  138 +++
+ gMCP-0.8-6/gMCP/R/generateBounds.R                                                         |   97 ++
+ gMCP-0.8-6/gMCP/R/generatePvals.R                                                          |  101 ++
+ gMCP-0.8-6/gMCP/R/generateTest.R                                                           |   87 +
+ gMCP-0.8-6/gMCP/R/generateWeights.R                                                        |   36 
+ gMCP-0.8-6/gMCP/R/graph2latex.R                                                            |  108 ++
+ gMCP-0.8-6/gMCP/R/graphMCP.R                                                               |    9 
+ gMCP-0.8-6/gMCP/R/graphTest.R                                                              |  111 ++
+ gMCP-0.8-6/gMCP/R/helperGUI.R                                                              |   36 
+ gMCP-0.8-6/gMCP/R/matrix2graph.R                                                           |   37 
+ gMCP-0.8-6/gMCP/R/misc.R                                                                   |   39 
+ gMCP-0.8-6/gMCP/R/modifyGraphs.R                                                           |   57 +
+ gMCP-0.8-6/gMCP/R/onLoad.R                                                                 |   48 -
+ gMCP-0.8-6/gMCP/R/plotCI.R                                                                 |  341 ++++---
+ gMCP-0.8-6/gMCP/R/rqmvnorm.R                                                               |   32 
+ gMCP-0.8-6/gMCP/R/sampSize.R                                                               |only
+ gMCP-0.8-6/gMCP/R/startGUIs.R                                                              |   80 +
+ gMCP-0.8-6/gMCP/R/subVariables.R                                                           |   51 +
+ gMCP-0.8-6/gMCP/TODO                                                                       |   84 +
+ gMCP-0.8-6/gMCP/build                                                                      |only
+ gMCP-0.8-6/gMCP/inst/CITATION                                                              |    5 
+ gMCP-0.8-6/gMCP/inst/doc/AQuickStart.Rnw                                                   |  109 --
+ gMCP-0.8-6/gMCP/inst/doc/AQuickStart.pdf                                                   |binary
+ gMCP-0.8-6/gMCP/inst/doc/gMCP.pdf                                                          |binary
+ gMCP-0.8-6/gMCP/inst/doc/parametric.Rnw                                                    |  448 ----------
+ gMCP-0.8-6/gMCP/inst/doc/parametric.pdf                                                    |binary
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/config/GeneralConfig.java                        |    8 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/AboutDialog.java                             |    2 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/ErrorDialogGMCP.java                         |    4 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/MenuBarMGraph.java                           |   29 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/RCallServicesREngineWrapper.java             |only
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/RControl.java                                |   11 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/datatable/DataFramePanel.java                |    2 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/datatable/DataTableModel.java                |    9 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/datatable/EpsilonTableCellRenderer.java      |   36 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/dialogs/AlternativesDialog.java              |    3 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/dialogs/DialogConfIntEstVar.java             |   14 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/dialogs/MatrixCreationDialog.java            |    2 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/dialogs/PowerDialogParameterUncertainty.java |  343 +------
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/dialogs/RearrangeNodesDialog.java            |    2 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/dialogs/RejectedDialog.java                  |    3 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/dialogs/TellAboutOnlineUpate.java            |    2 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/graph/EdgeWeight.java                        |   26 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/graph/GraphView.java                         |   65 -
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/graph/NetList.java                           |   44 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/graph/PPanel.java                            |   28 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/graph/PView.java                             |   16 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/graph/WrongInputException.java               |only
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/options/GeneralPanel.java                    |    2 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/options/MiscPanel.java                       |   11 
+ gMCP-0.8-6/gMCP/inst/java-src/org/af/gMCP/gui/options/NumericPanel.java                    |    9 
+ gMCP-0.8-6/gMCP/inst/java-src/tests/LoadSaveTest.java                                      |    2 
+ gMCP-0.8-6/gMCP/inst/java/gsrmtp.jar                                                       |binary
+ gMCP-0.8-6/gMCP/inst/unitTests/runit.entangled.R                                           |    6 
+ gMCP-0.8-6/gMCP/man/bdiagNA.Rd                                                             |   41 
+ gMCP-0.8-6/gMCP/man/calcPower.Rd                                                           |  143 +--
+ gMCP-0.8-6/gMCP/man/confint.Rd                                                             |    9 
+ gMCP-0.8-6/gMCP/man/corMatWizard.Rd                                                        |   60 -
+ gMCP-0.8-6/gMCP/man/doInterim.Rd                                                           |  128 +-
+ gMCP-0.8-6/gMCP/man/entangled.Rd                                                           |    2 
+ gMCP-0.8-6/gMCP/man/exampleGraphs.Rd                                                       |  316 +++----
+ gMCP-0.8-6/gMCP/man/extractPower.Rd                                                        |   42 
+ gMCP-0.8-6/gMCP/man/gMCP-package.Rd                                                        |    3 
+ gMCP-0.8-6/gMCP/man/gMCP.Rd                                                                |  292 +++---
+ gMCP-0.8-6/gMCP/man/gMCPReport.Rd                                                          |   81 -
+ gMCP-0.8-6/gMCP/man/gMCPResult.Rd                                                          |    2 
+ gMCP-0.8-6/gMCP/man/generateBounds.Rd                                                      |  198 ++--
+ gMCP-0.8-6/gMCP/man/generatePvals.Rd                                                       |  227 ++---
+ gMCP-0.8-6/gMCP/man/generateTest.Rd                                                        |  173 +--
+ gMCP-0.8-6/gMCP/man/generateWeights.Rd                                                     |   72 -
+ gMCP-0.8-6/gMCP/man/getJavaInfo.Rd                                                         |only
+ gMCP-0.8-6/gMCP/man/graph2latex.Rd                                                         |  155 +--
+ gMCP-0.8-6/gMCP/man/graphAnalysis.Rd                                                       |   59 -
+ gMCP-0.8-6/gMCP/man/graphGUI.Rd                                                            |  105 +-
+ gMCP-0.8-6/gMCP/man/graphMCP.Rd                                                            |    6 
+ gMCP-0.8-6/gMCP/man/graphTest.Rd                                                           |  115 +-
+ gMCP-0.8-6/gMCP/man/joinGraphs.Rd                                                          |   73 -
+ gMCP-0.8-6/gMCP/man/matrix2graph.Rd                                                        |   60 -
+ gMCP-0.8-6/gMCP/man/placeNodes.Rd                                                          |   65 -
+ gMCP-0.8-6/gMCP/man/plotSimCI.Rd                                                           |   64 -
+ gMCP-0.8-6/gMCP/man/rejectNode.Rd                                                          |   79 -
+ gMCP-0.8-6/gMCP/man/replaceVariables.Rd                                                    |   58 -
+ gMCP-0.8-6/gMCP/man/rqmvnorm.Rd                                                            |   57 -
+ gMCP-0.8-6/gMCP/man/secondStageTest.Rd                                                     |  142 +--
+ gMCP-0.8-6/gMCP/man/subgraph.Rd                                                            |   44 
+ gMCP-0.8-6/gMCP/man/substituteEps.Rd                                                       |   49 -
+ gMCP-0.8-6/gMCP/man/unitTestsGMCP.Rd                                                       |only
+ gMCP-0.8-6/gMCP/vignettes/AQuickStart.Rnw                                                  |  109 --
+ gMCP-0.8-6/gMCP/vignettes/Makefile                                                         |    8 
+ gMCP-0.8-6/gMCP/vignettes/cache                                                            |only
+ gMCP-0.8-6/gMCP/vignettes/figure/unnamed-chunk-23.pdf                                      |binary
+ gMCP-0.8-6/gMCP/vignettes/gMCP/AQuickStart-fake.Rnw                                        |only
+ gMCP-0.8-6/gMCP/vignettes/gMCP/AQuickStart.Rnw                                             |only
+ gMCP-0.8-6/gMCP/vignettes/gMCP/gMCP.Rnw                                                    |   97 +-
+ gMCP-0.8-6/gMCP/vignettes/gMCP/parametric-fake.Rnw                                         |only
+ gMCP-0.8-6/gMCP/vignettes/gMCP/parametric.Rnw                                              |only
+ gMCP-0.8-6/gMCP/vignettes/parametric.Rnw                                                   |  448 ----------
+ gMCP-0.8-6/gMCP/vignettes/pictures/CIDialog.png                                            |binary
+ 116 files changed, 3905 insertions(+), 3328 deletions(-)
+
+Diff between gMCP versions 0.8-6 dated 2014-02-17 and 0.8-7 dated 2014-08-26
+
+ gMCP-0.8-6/gMCP/build                                 |only
+ gMCP-0.8-6/gMCP/inst/build.xml                        |only
+ gMCP-0.8-6/gMCP/inst/doc                              |only
+ gMCP-0.8-6/gMCP/inst/java-src                         |only
+ gMCP-0.8-6/gMCP/vignettes/Makefile                    |only
+ gMCP-0.8-6/gMCP/vignettes/cache                       |only
+ gMCP-0.8-6/gMCP/vignettes/createKnitrVignette.sh      |only
+ gMCP-0.8-6/gMCP/vignettes/figure                      |only
+ gMCP-0.8-6/gMCP/vignettes/gMCP                        |only
+ gMCP-0.8-7/gMCP/DESCRIPTION                           |   16 
+ gMCP-0.8-7/gMCP/MD5                                   |  581 +++++---
+ gMCP-0.8-7/gMCP/NAMESPACE                             |    1 
+ gMCP-0.8-7/gMCP/NEWS                                  |   16 
+ gMCP-0.8-7/gMCP/R/doRUnitTests.R                      |    5 
+ gMCP-0.8-7/gMCP/R/onLoad.R                            |   24 
+ gMCP-0.8-7/gMCP/inst/classes                          |only
+ gMCP-0.8-7/gMCP/java                                  |only
+ gMCP-0.8-7/gMCP/vignettes/AQuickStart-concordance.tex |only
+ gMCP-0.8-7/gMCP/vignettes/AQuickStart.R               |only
+ gMCP-0.8-7/gMCP/vignettes/AQuickStart.Rnw             |  112 +
+ gMCP-0.8-7/gMCP/vignettes/AQuickStart.pdf             |only
+ gMCP-0.8-7/gMCP/vignettes/AQuickStart.synctex.gz      |only
+ gMCP-0.8-7/gMCP/vignettes/AQuickStart.tex             |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP-concordance.tex        |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.R                      |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.Rnw                    | 1163 +++++++++++++++++-
+ gMCP-0.8-7/gMCP/vignettes/gMCP.idx                    |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.ilg                    |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.ind                    |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.loa                    |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.lof                    |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.lot                    |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.pdf                    |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.synctex.gz             |only
+ gMCP-0.8-7/gMCP/vignettes/gMCP.tex                    |only
+ gMCP-0.8-7/gMCP/vignettes/parametric-concordance.tex  |only
+ gMCP-0.8-7/gMCP/vignettes/parametric.R                |only
+ gMCP-0.8-7/gMCP/vignettes/parametric.Rnw              |  449 ++++++
+ gMCP-0.8-7/gMCP/vignettes/parametric.pdf              |only
+ gMCP-0.8-7/gMCP/vignettes/parametric.synctex.gz       |only
+ gMCP-0.8-7/gMCP/vignettes/parametric.tex              |only
+ 41 files changed, 2089 insertions(+), 278 deletions(-)

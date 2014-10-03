@@ -1,8 +1,213 @@
-Changes in version 0.8-2 (??-??-2013, Rev. 1???)
-================================================
+Changes in version 0.8-8 (03-10-2014)
+=====================================
+
+- API FUNCTION PARAMETER CHANGE: The argument 'exhaust' in the functions
+  'generateBounds', 'generatePvals' and 'generateTest' was renamed to
+  'upscale' to reduce misinterpretation.
+
+- Since CRAN currently will build binaries only for 3.0 and 3.1, we drop support
+  for R < 3.0.0 in the official releases to make our lives easier. Nevertheless 
+  there is a branch pre-R3 on github for those interested (or simply contact us 
+  if you are using an older version of R).
+
+- Up to now the parameter 'test' of function gMCP could be one of the following:
+  "Bonferroni", "Simes", "Bretz2011" or "simple-parametric".
+  We now introduced a new parameter 'upscale' (default FALSE) and restricted 'test' to:
+  "Bonferroni", "Simes" and "parametric", 
+  where the old "Bretz2011" corresponds to 'test="parametric", upscale=TRUE' and
+  the old "simple-parametric" to 'test="parametric", upscale=FALSE'.
+  For compatibility the old function calls actually still work, but are discouraged.
+
+- The parameters 'cr' and 'sigma' in function 'calcPower' were renamed into 'corr.test' 
+  and 'corr.sim' respectively to further clarify that both are correlation matrices,
+  the first used for the test (this matrix may contain NAs if the full correlation is 
+  not known for the test) and the second one for the simulation (which can not contain 
+  NAs and may also differ from the first one if power under misspecification is 
+  investigated). 
+  For compatibility the old function calls actually still work, but are discouraged.
+
+- Fixed: The (experimental) power calculations were off for graphs where not all  
+  subgraphs created by rejections have the full alpha level.
+  Thanks to Yevgen Tymofyeyev for spotting this!
+
+- The function graph2latex got a new parameter 'showAlpha'. Now per default the graph
+  weights are shown and not the local alpha levels in the nodes. The old output
+  can be reproduced by setting 'showAlpha' to TRUE.
+
+- Fixed: Graph image exports were not possible due to some recently introduced bug.
+
+- Fixed: Some matrices were completely grayed out although only the diagonal 
+  was not editable.
+
+- Random seed is shown for results from methods which use random numbers and can 
+  be set via options.
+
+- Support for entangled graphs is no longer highly experimental, 
+  but enabled as default.
+
+- Support for parametric tests for entangled graphs, i.e. 'generatePvals'
+  and 'generateWeights' accept entangled graphs now.
+
+- For entangled graphs there is now more than one tab showing the graph:
+  The first tab still shows the combined graphs and then a separate tab
+  for each graph follows.
+
+- Settings for power calculations are saved temporarily or between sessions.
+  
+- The (disabled) menu entry for PDF reports was replaced by functionality
+  for Office Open XML (MS Word docx) support. Package xlsxjars is therefore
+  now a dependency (IMPORTS), since it already provides the necessary
+  Apache POI jar files.
+
+- Settings in the dialogs for power analysis and sample size calculations
+  are remembered and can be saved and loaded as XML files.
+
+- Improved Graph Analysis checks whether weights sum up to 1 for all subgraphs.
+
+- In case of unexpected errors on Java's Event-Dispatch-Thread no error dialog
+  was shown if Java >=7 was used. This is now fixed. Also error handling
+  is now more robust.
+
+- Edges are highlighted if transition matrix cells are edited.
+
+- New example graph from Wang, B. and Ting, N. (2014): "An Application of Graphical 
+  Approach to Construct Multiple Testing Procedures in a Hypothetical Phase III Design." 
+  Frontiers in public health, 1 (75).
+
+- Fixed: In some cases the description of the graph objects was not loaded.
+
+- Fixed: A backslash '\' in the graph description could crash the GUI including R.
+
+- Better handling of unintentionally entered NaN or infinity values.
+
+ 191 files changed, 8047 insertions(+), 3575 deletions(-) [git diff --stat v0.8-7..master]
+
+Changes in version 0.8-7 (26-08-2014)
+=====================================
+
+- Compatible to CommonJavaJars 1.0-5.
+
+- Fixed CRAN warnings.
+
+- Moved Java source to /java as requested by CRAN.
+
+- Dropped Deducer integration for now.
+
+ 41 files changed, 2089 insertions(+), 278 deletions(-)
+
+
+Changes in version 0.8-6 (17-02-2014)
+=====================================
+
+- Improved memory settings. Especially in R 2.15.1 and 2.15.2 on 32-bit systems 
+  errors like the following could occur when the GUI was used:
+  java.lang.OutOfMemoryError: unable to create new native thread
+
+- Fixed: When the value of the alpha field was not a valid number in the GUI,
+  an infite loop of warning dialogs popped up.
+  
+- Fixed: Loading old graph objects from version 0.6.x, i.e. from before August 2011,
+  without package 'graph' asks to install this package. If this is refused or
+  the installation failed, bad things happened like a complete crash of the current
+  R session.
+
+- Function 'graph2latex' gains an argument 'scaleText'. If TRUE (default)
+  a scalebox is used in LaTeX instead of the optional parameter 'scale'
+  from the tikzpicture environment.
+
+- Improved documentation. Some Rd files are built by a patched version of
+  roxygen2 that escapes "\" in arguments and understands "returnItem": 
+  install_github("roxygen2", username="kornl")
+  (This version includes especially Yihui's pull request: 
+   https://github.com/klutometis/roxygen/pull/112 
+   and A. Alfons's pull request:
+   https://github.com/klutometis/roxygen/pull/30 )
+
+- Using RCallServicesREngineWrapper to eval each expression in the environment 
+  gMCP:::gMCPenv instead of the global environment.
+
+- Some errors were catched in Java or R, but still showed up in the console.
+  We now use 'try(..., silent=TRUE)' in these cases.
+
+- Adjacency Matrix is renamed to Transition Matrix (since some people 
+  use the word Adjacency Matrix for the binary matrix).
+
+- We always use correlation matrices instead of covariance matrices in the GUI.
+
+ 139 files changed, 5526 insertions(+), 3428 deletions(-)
+
+
+Changes in version 0.8-5 (18-07-2013)
+=====================================
+
+- Removed dangerous parameter seed from function rqmvnorm and calcPower.
+
+- POSIX conforming Makefile fixes problems under Solaris.
+
+- Fix for problems with knitr 1.3.
+
+- Fixed: The rarly used offset parameter did not work well with the new edges 
+   consisting of arcs in TikZ.
+
+ 24 files changed, 88 insertions(+), 248 deletions(-)
+
+
+Changes in version 0.8-4 (15-07-2013)
+=====================================
+
+- R's base function chol for the Choleski Decomposition now defaults to LAPACK 
+  in R 3.0 resulting in meaningless results for not non-negative definite 
+  matrices (without any numerical tolerance! And in R devel it is by now defunct: 
+  ‘chol(pivot = TRUE, LINPACK = TRUE)’ is defunct.). 
+  Therefore power calculations for only semi-positive definite correlation 
+  matrices could have been off under R 3.0 in previous versions.
+  We switched to the singular value decomposition.
+
+- Fixed: List of user defined power functions doesn't need to have names.
+
+- Further work on the experimental entangled graphs feature.
+
+- Since the vignettes were moved from gMCP/inst/doc to gMCP/vignettes
+  most likely they will only be build with R >= 2.14.0.
+
+- Moved MASS, PolynomF, multcomp, lattice, mvtnorm, Matrix, CommonJavaJars and 
+  methods from DEPENDS to IMPORTS. Therefore loading gMCP will no longer add 
+  these packages to the search path and if for example you want to use 
+  contrMat from package multcomp you have to load/attach the package yourself.
+
+ 37 files changed, 437 insertions(+), 136 deletions(-)
+
+
+Changes in version 0.8-3 (14-06-2013)
+=====================================
+
+- If a correlation matrix is selected in the main window, the same 
+  correlation matrix is loaded per default in the power analysis dialog.
+
+- To comply with CRAN policies the function graphGUI has now an argument
+  envir to specify in which environment the object graph is located and/or 
+  it should be saved (default is the global environment).
+
+ 41 files changed, 422 insertions(+), 140 deletions(-)
+
+
+Changes in version 0.8-2 (14-06-2013)
+=====================================
 
 - The output of graph2latex has greatly improved and you nearly get 
   in TikZ what you can see in the Java GUI. 
+
+- Fixed a bug existing in gMCP 0.7-11 to 0.8-1 which caused calculations with
+  multiple power settings in the GUI to stop with an error.
+  
+- The official source repository switched from subversion/r-forge to git/github:
+  https://github.com/kornl/gMCP
+  (R package devtools from Hadley Wickham et al. can be used to install
+  development versions.)
+  Instead of subversion revision numbers you will find annotated tags specifying 
+  the versions in the git repository.
+  
+ (This version was not accepted on CRAN. See news for version 0.8-3.)
 
 
 Changes in version 0.8-1 (06-04-2013, Rev. 1567)
@@ -396,8 +601,7 @@ Changes in version 0.7-0 (26-Aug-2011, Rev. 964)
   addEdge -> setEdge, edgeData -> edgeAttr, 
   nodeData -> nodeAttr, nodes -> getNodes 
 
-- Power simulation code from our third author
-  Bjoern Bornkamp.
+- Power simulation code.
 
 - New example graphs:
 

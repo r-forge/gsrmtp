@@ -9,7 +9,8 @@
 	Calculates simultaneous confidence intervals for sequentially rejective multiple test procedures.
 }
 \usage{
-	simConfint(object, pvalues, confint, alternative=c("less", "greater"), estimates, df, alpha=0.05, mu=0)
+	simConfint(object, pvalues, confint, alternative=c("less", "greater"), 
+             estimates, df, alpha=0.05, mu=0)
 }
 
 \arguments{
@@ -21,9 +22,12 @@
   } 
   \item{confint}{
   	One of the following:
-  	A character string "normal", "t" or a function that calculates the confidence intervals.
-  	If confintF=="t" the parameter "df" must be specified. If confint is a function it must be of signature \code{("character", "numeric")},
-  	where the first parameter is the hypothesis name and the second the marginal confidence level. (See examples)
+  	A character string \code{"normal"}, \code{"t"} or a function that 
+    calculates the confidence intervals.
+  	If \code{confint=="t"} the parameter \code{df} must be specified. 
+    If \code{confint} is a function it must be of signature 
+    \code{("character", "numeric")},	where the first parameter is the 
+    hypothesis name and the second the marginal confidence level (see examples).
   }  
   \item{alternative}{
   	A character string specifying the alternative hypothesis,

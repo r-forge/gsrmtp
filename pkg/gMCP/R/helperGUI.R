@@ -50,6 +50,81 @@ checkPSD <- function(m) {
 	return("")
 }
 
+# Checks the following properties:
+# Values must be between -1 and 1.
+# Diagonal must be equal to 1.
+# Matrix must be symmetric.
+checkCorrelation <- function(m, returnMessage=FALSE, na.allowed=TRUE) {
+  if (!na.allowed && any(is.na(m))) {
+    if (returnMessage) return("Matrix can not contain NAs.")
+    return(FALSE)
+  }
+  if (!is.numeric(m) || !is.matrix(m)) {
+    if (returnMessage) return("Matrix must be a numeric matirx.")
+    return(FALSE)
+  }
+  if (!isTRUE(all.equal(1, max(1, max(abs(m)[!is.na(m)]))))) {
+    if (returnMessage) return("Values must be between -1 and 1.")
+    return(FALSE)
+  }
+  if (!isTRUE(all.equal(diag(m), rep(1, dim(m)[1])))) {
+    if (returnMessage) return("Diagonal must be equal to 1.")
+    return(FALSE)
+  }  
+  if (!isSymmetric(unname(m))) {
+    if (returnMessage) return("Matrix must be symmetric.")
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+checkQuadraticMatrix <- function(m, n=NULL) {
+  if (!is.numeric(m) || !is.matrix(m)) return(FALSE)
+  if (!is.null(n) && dim(m)[1]!=n) return(FALSE)
+  return(dim(m)[1]==dim(m)[2])
+}
+
+forceCorrelation <- function(m) {
+  m[lower.tri(m)] <- t(m)[lower.tri(m)]
+  return(cov2cor(m))
+}
+
+#' Placement of graph nodes
+#' 
+#' Places the nodes of a graph according to a specified layout.
+#' 
+#' If one of \code{nrow} or \code{ncol} is not given, an attempt is made to
+#' infer it from the number of nodes of the \code{graph} and the other
+#' parameter.  If neither is given, the graph is placed as a circle.
+#' 
+#' @param graph A graph of class \code{\link{graphMCP}} or class
+#' \code{\link{entangledMCP}}.
+#' @param nrow The desired number of rows.
+#' @param ncol The desired number of columns.
+#' @param byrow Logical whether the graph is filled by rows (otherwise by
+#' columns).
+#' @param topdown Logical whether the rows are filled top-down or bottom-up.
+#' @param force Logical whether a graph that has already a layout should be
+#' given the specified new layout.
+#' @return The graph with nodes placed according to the specified layout.
+#' @author Kornelius Rohmeyer \email{rohmeyer@@small-projects.de}
+#' @seealso \code{\link{graphMCP}}, \code{\link{entangledMCP}}
+#' @keywords graphs
+#' @examples
+#' 
+#' 
+#' g <- matrix2graph(matrix(0, nrow=6, ncol=6))
+#' 
+#' g <- placeNodes(g, nrow=2, force=TRUE)
+#' 
+#' \dontrun{
+#' graphGUI(g)
+#' 
+#' }
+#' 
+#' 
+#' @export placeNodes
+
 placeNodes <- function(graph, nrow, ncol, byrow = TRUE, topdown = TRUE, force = FALSE) {
 	entangled <- NULL
 	# If the graph is entangled only place the nodes of the first graph
@@ -117,6 +192,27 @@ stupidWorkAround <- function(graph) {
 	return(graph)
 }
 
+getAllCorrelationMatrices <- function(envir=globalenv(), n="all") {
+  objects <- ls(envir)
+  matrices <- c()
+  for (obj in objects) {
+    candidate <- get(obj, envir=envir)
+    if (is.matrix(candidate) && dim(candidate)[1] == dim(candidate)[2] && checkCorrelation(candidate)) {
+      if (n=="all" || dim(candidate)[1]==n) {
+        matrices <- c(matrices, obj)
+      }
+    }
+  }
+  if (length(matrices)==0) {
+    if (n=="all") {
+      return("No quadratic matrices found.")
+    } else {
+      return(paste("No ",n,"x",n,"-matrices found.", sep=""))
+    }
+  }
+  return(matrices)
+}
+
 getAllQuadraticMatrices <- function(envir=globalenv(), n="all") {
 	objects <- ls(envir)
 	matrices <- c()
@@ -152,7 +248,12 @@ getAllGraphs <- function(envir=globalenv()) {
 }
 
 getObjectInfo <- function(object) {
-	return(paste(capture.output(print(object)), collapse="\n"))
+  s <- paste(capture.output(print(object)), collapse="\n")
+  descr <- attr(object, "description")
+  if (!is.null(descr)) {
+    s <- paste(s, "\nDescription:", descr, sep="\n")
+  }
+	return(s)
 }
 
 gMCPVersion <- function() {

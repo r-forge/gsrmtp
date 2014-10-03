@@ -1,4 +1,1 @@
-inst/java-src
-inst/build.xml
-inst/doc/Makefile
-inst/doc/myIndex.ist
+vignettes/myIndex.ist

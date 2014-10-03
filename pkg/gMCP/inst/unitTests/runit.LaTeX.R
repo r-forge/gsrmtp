@@ -1,10 +1,11 @@
 test.LaTeX <- function() {
+  #TODO Create a function getAllGraphs(variables=TRUE) for all these occcurences.
 	graphs <- list(BonferroniHolm(5),
 			parallelGatekeeping(),
 			improvedParallelGatekeeping(),
 			BretzEtAl2011(),
-			#HungEtWang2010(),
-			#HuqueAloshEtBhore2011(),
+			HungEtWang2010(),
+			HuqueAloshEtBhore2011(),
 			HommelEtAl2007(),
 			HommelEtAl2007Simple(),
 			MaurerEtAl1995(),
@@ -13,10 +14,10 @@ test.LaTeX <- function() {
 			cycleGraph(nodes=paste("H",1:4,sep=""), weights=rep(1/4, 4)),
 			fixedSequence(5),
 			fallback(weights=rep(1/4, 4)),
-			#generalSuccessive(weights = c(1/2, 1/2)),
+			generalSuccessive(weights = c(1/2, 1/2)),
 			simpleSuccessiveI(),
 			simpleSuccessiveII(),
-			#truncatedHolm(),
+			truncatedHolm(),
 			BauerEtAl2001(),
 			BretzEtAl2009a(),
 			BretzEtAl2009b(),
@@ -28,7 +29,7 @@ test.LaTeX <- function() {
 		report <- paste(report, graph2latex(graph), sep="\n")
 	}
 	report <- paste(report, "\\end{document}", sep="\n")
-	if (interactive() && "interactive" %in% strsplit(Sys.getenv("GMCP_UNIT_TESTS"), " ")[[1]]) {
+	if (interactive() && gMCP:::tests("interactive")) {
 		file <- paste(Sys.getenv("GMCP_UNIT_TEST_OPATH"), "report_test.tex", sep="/")
 		cat(report, file=file)
     wd <- getwd()

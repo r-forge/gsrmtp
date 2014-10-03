@@ -1,16 +1,131 @@
+Is install_github(..., dependencies = TRUE) checking for the correct package versions?
+
+Are changes to "Use experimental features" persistent during sessions?
+
+Attach correlation matrix to graph?
+
+Alpha in power calculations?
+
+Should correlation matrices be attached to graphs (as it is down with pvalues)?
+
+ToDo: Buttons if one edge point is selected. Right mouse click as cancel.
+
+Documention for value in secondStageTest looks strange.
+Does rJava again contain all necessary jar files?
+
+New features use Java 6 settings. Use reflection for Java 5 compatibility.
+
+- Multiple Setting:
+   Instead of c(0,0,...) use #hypotheses text fields. Check whether tab works as expected. Tab works, but most likely we want "select all" on "focus".
+   Check for empty textfields
+   Remember multiple setting options and add "clear" button. Save settings under name.
+   User specified power functions should be namable in the GUI. Save output as data.frame and CSV.
+
+- Sample Sizes: Drop "n" column,  
+  Replace n, \sigma, \mu with \theta θ and Standard error of \theta.
+  Specify marginal power (and one field for which alpha this power was calculated).
+
+- "Select an R correlation matrix" -> "?"
+- _Always_ use correlation matrix - never covariance matrix. Check for this for imports (and ask for converting to corMat). In the GUI disable diagonal.
+
+- Check all output whether numbers should be rounded (e.g. 0.12000000000000000032) or converted to fractions?
+(Pay attention to epsilons and numerical instabilities.)
+
+- Reodering hypotheses doesn't work.
+- See ?Deprecated and ?Defunct for outdated code
+
+- cat((graph2latex(improvedParallelGatekeeping(), nodeTikZ="minimum size=1.2cm", tikzEnv=FALSE, offset=c(300, 0)))
+  has inverted arrows (arcs are too long) without manual 'nodeR=27'.
+
+- Check verbose output of algorithm (i) when, why? ii) new FormLayout)
+- Check whether option "Colored image files and reports" is respected.
+
+- Why is there still a thread running if the GUI is closed?
+
+- Test error handler with Java 5.
+
+- In the log there are two lines:
+Package version could not be set:
+org.rosuda.REngine.REXPLogical cannot be cast to org.rosuda.REngine.REXPString
+
+java.lang.NoSuchMethodError: gdFlush
+  at org.rosuda.JRI.Rengine.rniEval(Native Method)
+	at org.rosuda.REngine.JRI.JRIEngine.eval(JRIEngine.java:281)
+	at org.rosuda.REngine.REngine.parseAndEval(REngine.java:102)
+	at org.af.jhlir.backends.rengine.RCallServicesREngine.engineEval(RCallServicesREngine.java:92)
+	at org.af.jhlir.backends.rengine.RCallServicesREngine.eval(RCallServicesREngine.java:70)
+	at org.af.gMCP.gui.RCallServicesREngineWrapper.eval(RCallServicesREngineWrapper.java:15)
+	at org.af.gMCP.gui.dialogs.DialogConfIntEstVar.calculateCI(DialogConfIntEstVar.java:196)
+	at org.af.gMCP.gui.dialogs.DialogConfIntEstVar.insertUpdate(DialogConfIntEstVar.java:329)
+
+Use tools::write_PACKAGES(".", type="source") to create PACKAGES and PACKAGES.gz.
+
+Nodes are two big in this graph (and arrow heads therefore reverted - What about dropping $\alpha$?):
+graph2latex(improvedParallelGatekeeping(), scale=0.7, nodeTikZ="minimum size=1.2cm", tikzEnv=FALSE, offset=c(300, 0))
+
+- Upscale does not work yet with adjusted p-values!
+- Allow upscale for Simes test? (Theory!)
+- Is the shortcut really used for the Simes test (it can not be used for adjusted p-values, but if these are not asked for the shortcut should be used).
+
+- generateTest is missing argument 'upscale' (but which is referenced - by copy'n'paste - in its manual page).
+
+- graphAnalysis now can take a really long time (warn or put into another [cancelable] thread?)
+- NEWS.Rd and news()
+- Check whether graphAnalysis slows down GUI.
+
+- Add close button for tabs to NetListPanels.
+
+Does not work any more:
+#' \dontrun{
+#' # If Rgraphviz is installed, we can take a look at the graph:
+#' library(Rgraphviz)
+#' renderGraph(layoutGraph(g))
+#' }
+
+- Check whether everything is okay here (with e.g. Ferber) - most likely yes:
+> eval(expression(edgeAttr(.InitialGraph1394185710245, "T3D1", "T2D1", "variableWeight") <- "1-\\nu"), envir=gMCP:::gMCPenv)
+> eval(expression(try(1-\nu, silent=TRUE)), envir=gMCP:::gMCPenv)
+Error: unexpected input in "eval(expression(try(1-\"
+
+- Streamline / throw out graphTest
+
+- http://docs.oracle.com/javase/1.5.0/docs/guide/net/proxies.html - http://stackoverflow.com/questions/376101/setting-jvm-jre-to-use-windows-proxy-automatically
+- Unify graphMCP and entangled graphs?
+- Integrate parameter 'envir' into corMatWizard.
+
+From xlsxjars:
+ jversion <- .jcall("java.lang.System", "S", "getProperty", "java.version")
+ if (jversion < "1.5.0") stop(paste("Your java version is ", jversion, ".  Need 1.5.0 or higher.", sep = ""))
+
+- Horizontal JScrollBar is inside vertical JScrollPane (so you have to scroll down to scroll to the right/left).
+
+- .jpackage(pkgname) in xlsxjars:::.onLoad messes up gMCP's .jinit(parameters=c("-Xrs", "-Xss1m")).
+
+- Explain that the order of the rejected hypotheses doesn't affect the end result.
+- Report was send dialog is sometimes behind ErrorReport.
+- Test proxy for ErrorReport.
+- http://semver.org/ Should we switch from version numbers like 0.8-3 to 0.8.3?
+- NICER BUGREPORT!
+- Let user choose colors for entangled graphs.
+- Simes and power
+- Simes + parametric test for entangled graphs.
+- Optionally display alpha weighting directly in entangled graphs.
+- Save settings for power and remember them in the same session.
+- Names for userdefined functions.
+- Make node bigger for a huge number of entangled layers? (Or arrange them in a different way?)
+- Disable CI and adj.P for entangled graphs.
+- graph2latex for entangled graphs.
+- Black&White version in graph2latex
+- Link to archive is wrong on bundle site.
+- Removing layer from entangled graphs does not remove weights?
 - GUI speed optimization (try Ferber II with 15x5)
-- Is there a better way than to assign everything to the global environment:
-     assign(newGraphName, x, envir=globalenv())
-  (The main point is the usability not technical problems! See also utils::getAnywhere)   
 - Also check layout of (result) dialogs for big graphs.
-- Highlight edges (and perhaps nodes) depending on the focus in the dataframe. 
 - Check copyright notes for code under BSD Licence
 - Give more information about "testing mode" - one time JOptionPane for example.
 - Find good color set for entangled graphs.
 - Check whether parametric test mode is set correctly in power simulations.
 - Why is RControl.getR().getHistory() not accessible when the gMCP call fails?
 - Umlaute in literatur.bib, e.g. Röhmel
-- Options: Show R Code
 - .asRLogical().getData()[0] can be true but NA in R
 - look at warnings regarding exhaustAlpha (also optimality of graph)
 - Email subscription on start page (also tell user after 10th start of GUI)
@@ -39,6 +154,8 @@
 - Check in CI zu max(0, ..) bzw. min(0, ..) / means
 - keine p-Werte übernehmen
 - Buttons to load R objects for power dialog.
+- check whether we want to use java.math.BigDecimal somewhere.
+- Improve and use in manuals/examples/etc. getWeights, getMatrix (should e.g. convert "1/3" to numeric 0.3333), etc.
 === POWER ===
 - Erben der Korrelationsmatrix vom Hauptfenster (warn if this is not the case?)
 - Copy&Paste of Results (Table, Text, allow to save)
@@ -54,6 +171,10 @@
 - integrate the two files "tests.R" and "unirootbug.Rd" in directory "unitTests" into unit tests. 
 - improve behavior of tables if "Automatically enter the editing mode, whenever a table cell gets the focus" is set to false.
 - round values in CI Dialog
+- "Packages should not write in the users’ home filespace, nor anywhere else on the file system apart from the R session’s temporary directory (or during installation in the location pointed to by TMPDIR: and such usage should be cleaned up). Installing into the system’s R installation (e.g., scripts to its bin directory) is not allowed. Limited exceptions may be allowed in interactive sessions if the package obtains confirmation from the user."
+Check config, logfile, ...
+
+- JHLIR creates variable .jhlir.errors in global environment.
 
 - Characterize optimal graphs.
 
@@ -70,7 +191,10 @@
 - JToggleButton also for new edges.
 - Also let an dialog (optionally) pop up to ask for the edge weight. 
 
+Regarding LaTeXTool.StringToLaTeX:
 - (1+1/2)/2 as edge weight creates an error.
+- "(1+2ε)/3"  ->   "\frac{{(1+2ε)}}{3}" Why is ε not replaced.
+
 - Options for Edge label font size etc?
 
 Is this still the case?
@@ -88,6 +212,7 @@ Error in calcPower(weights = .tmpGraph@weights, alpha = 0.05, G = .tmpGraph@m,  
 Critical:
 =========
 
+- Test (and perhaps fix) the following: graphGUI("graph", envir=new.env())
 - Think about JavaGD devices. (User wants to plot in R Console etc.)
 - Does Deducer interfere JavaGD? (When is .onLoad executed?)
 - Make JavaGD only a suggest (Solaris and generally safer)
@@ -162,6 +287,7 @@ Possible MalWare 'W32/NewMalware-Generic-8d27-f554' found in '5832765_287X_AZ-D_
 - More fairness regarding the Maurer et al. example ("improved" - what does the paper cover)
 - All Dialogs should have cancel / ok buttons
 - Capture verbose output
+- Classpath exception
 
 Medium priority:
 ================
@@ -258,6 +384,15 @@ From http://download.oracle.com/javase/1.3/docs/tooldocs/solaris/java.html :
 
 ---
 
+Note for building gMCP for older R versions:
+============================================
+
+Prof Brian Ripley: - if your LaTeX installation gets updated and you do not want to update 
+R, you can update just Rd.sty from 
+https://svn.r-project.org/R/trunk/share/texmf/tex/latex/Rd.sty .  Or you 
+could write a file inconsolata.sty as a wrapper for zi4.sty and put it 
+in your TEXINPUTS path. [http://r.789695.n4.nabble.com/inconsolata-sty-is-liable-to-disappear-texinfo-5-1-td4669976.html]
+
 As always:
 ==========
 - more references, since some people will actually look at this package.
@@ -310,3 +445,50 @@ Trick to open PDF files from R:
  obj <- list(file = NULL, pdf = filepath, topic = NULL)
  class(obj) <- "vignette"
  print(obj)
+ 
+ ---
+ Everything looks fine in CI dialog but:
+ 
+ > Exception in thread "SwingWorker-pool-1260566389-thread-1" java.lang.NoSuchMethodError: gdFlush
+	at org.rosuda.JRI.Rengine.rniEval(Native Method)
+	at org.rosuda.REngine.JRI.JRIEngine.eval(JRIEngine.java:281)
+	at org.rosuda.REngine.REngine.parseAndEval(REngine.java:102)
+	at org.af.jhlir.backends.rengine.RCallServicesREngine.engineEval(RCallServicesREngine.java:92)
+	at org.af.jhlir.backends.rengine.RCallServicesREngine.eval(RCallServicesREngine.java:70)
+	at org.af.gMCP.gui.dialogs.DialogConfIntEstVar.calculateCI(DialogConfIntEstVar.java:190)
+	at org.af.gMCP.gui.dialogs.DialogConfIntEstVar.getCIPanel(DialogConfIntEstVar.java:130)
+	at org.af.gMCP.gui.dialogs.DialogConfIntEstVar.<init>(DialogConfIntEstVar.java:88)
+	at org.af.gMCP.gui.graph.GraphView$1.doInBackground(GraphView.java:236)
+	at org.af.gMCP.gui.graph.GraphView$1.doInBackground(GraphView.java:1)
+	at org.jdesktop.swingworker.SwingWorker$1.call(Unknown Source)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at org.jdesktop.swingworker.SwingWorker.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:722)
+ 
+---
+Look at highr and
+<<tikz-ex, engine = "tikz", fig.cap = "Funky tikz", fig.ext = 'png', cache=TRUE>>=
+\usetikzlibrary{arrows}
+\begin{tikzpicture}[node distance=2cm, auto,>=latex', thick, scale = 0.5]
+\node (P) {$P$};
+\node (B) [right of=P] {$B$};
+\node (A) [below of=P] {$A$};
+\node (C) [below of=B] {$C$};
+\node (P1) [node distance=1.4cm, left of=P, above of=P] {$\hat{P}$};
+\draw[->] (P) to node {$f$} (B);
+\draw[->] (P) to node [swap] {$g$} (A);
+\draw[->] (A) to node [swap] {$f$} (C);
+\draw[->] (B) to node {$g$} (C);
+\draw[->, bend right] (P1) to node [swap] {$\hat{g}$} (A);
+\draw[->, bend left] (P1) to node {$\hat{f}$} (B);
+\draw[->, dashed] (P1) to node {$k$} (P);
+\end{tikzpicture}
+@
+
+Bug in Roxygen. Roxygenize inserted documentation at a total wrong place (_in_ another function in another file): 
+
+#' @export subgraph
+	subgraph <- graph@subgraphs[[k]]

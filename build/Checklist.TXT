@@ -1,0 +1,25 @@
+- Has ant been called and is the jar file up to date?
+- Add summary from 'git diff --stat v0.x-x..HEAD' to NEWS
+Remark: Don't tag the version on the master branch - otherwise we have to compare directly with the parent on the pre-R3 branch:
+git diff --stat 392aa6bc..HEAD instead of v0.8-6..HEAD
+
+- R CMD check --as-cran under development version of R
+- tested with Windows?
+- Extensive RUnit Checks? unitTestsGMCP(extended=TRUE, interactive=TRUE, outputPath="/home/kornel/test/")
+- Check manual with R CMD Rd2pdf
+ 
+Mail:
+- Text-only?
+- From rohmeyer@small-projects.de?
+
+Git:
+git tag -a v0.x-y -m 'Version 0.x-y (??-??-????)'
+git push origin --tags
+
+Updated newest version on algorithm-forge.com?
+
+R/etc/Rprofile.site:
+
+library(gMCP)
+graphGUI()
+.isBundle <- TRUE
